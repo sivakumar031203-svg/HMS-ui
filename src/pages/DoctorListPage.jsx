@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import { useDoctors } from '../hooks/useDoctors';
 import DoctorCard from '../components/DoctorCard';
+import { useNavigate } from 'react-router-dom';
 
 const DoctorListPage = () => {
+
+  const navigate = useNavigate();
 
   const { doctors, loading, error } = useDoctors();
 
   const [search, setSearch] = useState('');
   const [filterSpec, setFilterSpec] = useState('');
+
+  const handleBookClick = (doctor) => {
+    navigate('/book', { state: { doctor } });
+  };
 
   const filteredDoctors = doctors.filter(doc => {
     const fullName = `${doc.firstName} ${doc.lastName}`.toLowerCase();
@@ -19,10 +26,6 @@ const DoctorListPage = () => {
   });
 
   const specializations = [...new Set(doctors.map(d => d.specialization))];
-
-  const handleBookClick = (doctor) => {
-    console.log('Book clicked for:', doctor);
-  };
 
   if (loading) {
     return (
